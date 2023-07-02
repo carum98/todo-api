@@ -1,5 +1,9 @@
 import mysql from 'mysql2'
 
+/**
+ * @param {string} sql
+ * @returns {Promise<object[] | object>}
+ */
 export async function query(sql) {
     try {
         const con = mysql.createConnection({

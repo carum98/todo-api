@@ -1,39 +1,87 @@
 import { User } from '../services/index.js'
 
-async function get(req, res) {
+/**
+ * @typedef {import('express').Request} Request
+ * @typedef {import('express').Response} Response
+ */
+
+/**
+ * @param {Request} _ 
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
+async function get(_, res) {
     const data = await User.getAll()
 
-	return res.status(200).json({ data })
+	return res.status(200).json({ 
+        data: data.map(item => item.toJson())
+    })
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
 async function getById(req, res) {
     const { id } = req.params
-    const data = await User.getById(id)
+    const data = await User.getById(parseInt(id))
 
-    return res.status(200).json({ data })
+    if (data) {
+        return res.status(200).json(data.toJson())
+    } else {
+        return res.status(404).json({ message: 'User not found' })
+    }
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
 async function create(req, res) {
     const { name, user_name, password } = req.body
-    await User.create({ name, user_name, password })
+    const data = await User.create({ name, user_name, password })
 
-    return res.status(201)
+    if (data) {
+        return res.status(201).json(data.toJson())
+    } else {
+        return res.status(400).json({ message: 'User not created' })
+    }
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
 async function remove(req, res) {
     const { id } = req.params
-    await User.remove(id)
+    const data = await User.remove(parseInt(id))
 
-    return res.status(204)
+    if (data) {
+        return res.status(204).json()
+    } else {
+        return res.status(404).json({ message: 'User not found' })
+    }
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
 async function update(req, res) {
     const { id } = req.params
 
     const { name, user_name, password } = req.body
-    await User.update({ id, name, user_name, password })
+    const user = await User.update({ id: parseInt(id), name, user_name, password })
 
-    return res.status(204)
+    if (user) {
+        return res.status(200).json(user.toJson())
+    } else {
+        return res.status(404).json({ message: 'User not found' })
+    }
 }
 
 export default {
