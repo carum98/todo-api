@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  api:
+    image: todo-api
+    container_name: todo-api
+    build: .
+    ports:
+      - "${PORT}:${PORT}"
+    depends_on:
+      - db
+    links:
+      - db
+    environment:
+      - PORT=${PORT}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_DATABASE=${DB_DATABASE}
+  
+  db:
+    image: mysql:8.0.33
+    container_name: todo-db
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_DATABASE}
+    volumes:
+      - ./.db:/var/lib/mysql

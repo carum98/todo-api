@@ -1,0 +1,16 @@
+{
+  "name": "todo-api",
+  "version": "1.0.0",
+  "author": "Carlos Umaña <cumana3098@gmail.com>",
+  "description": "",
+  "main": "index.js",
+  "license": "ISC",
+  "type": "module",
+  "scripts": {
+    "start": "node ."
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "mysql2": "3.4.3"
+  }
+}
