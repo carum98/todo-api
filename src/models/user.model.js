@@ -1,3 +1,5 @@
+import jwt from 'jsonwebtoken'
+
 /**
  * @typedef {object} UserType
  * @property {string} name
@@ -67,5 +69,25 @@ export class User {
         Object.keys(diff).forEach(key => diff[key] === undefined && delete diff[key])
 
         return diff
+    }
+
+    generateToken() {
+        const payload = {
+            user_name: this.user_name,
+        }
+
+        const token = jwt.sign(payload, process.env.SECRET_TOKEN || 'secret_token', {
+            expiresIn: '2h',
+        })
+
+        const refreshToken = jwt.sign(payload, process.env.SECRET_REFRESH_TOKEN || 'secret_refresh_token', {
+            expiresIn: '7d',
+        })
+
+        return {
+            token,
+            refreshToken,
+            expiresIn: 7200000,
+        }
     }
 }

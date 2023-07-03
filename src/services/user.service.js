@@ -11,17 +11,25 @@ async function getAll() {
 }
 
 /**
- * @param {number} id
- * @returns {Promise<User | null>}
+ * @param {object} param
+ * @param {number} [param.id]
+ * @param {string} [param.name]
+ * @param {string} [param.user_name]
+ * @param {string} [param.password]
+ * @returns {Promise<User[] | User | null>}
  */
-async function getById(id) {
-    const data = await Repo.getById(id)
+async function getBy(param) {
+    const data = await Repo.getBy(param)
 
     if (!data) {
         return null
     }
 
-    return new User(data)
+    if (Array.isArray(data)) {
+        return data.map(item => new User(item))
+    } else {
+        return new User(data)
+    }
 }
 
 /**
@@ -34,7 +42,15 @@ async function getById(id) {
 async function create({ name, user_name, password }) {
     const { insertId } = await Repo.create({ name, user_name, password })
 
-    return getById(insertId)
+    const user = await getBy({
+        id: insertId,
+    })
+
+    if (user && !Array.isArray(user)) {
+        return user
+    } else {
+        return null
+    }
 }
 
 /**
@@ -56,22 +72,22 @@ async function remove(id) {
  * @returns {Promise<User | null>}
  */
 async function update({ id, name, user_name, password }) {
-    const user = await getById(id)
+    const user = await getBy({ id })
 
-    if (!user) {
-        return null
+    if (user && !Array.isArray(user)) {
+        const diff = user.valuesDiffFrom({ name, user_name, password })
+
+        await Repo.update({ id, params: diff })
+    
+        return user.copyWith(diff)
     }
 
-    const diff = user.valuesDiffFrom({ name, user_name, password })
-
-    await Repo.update({ id, params: diff })
-
-    return user.copyWith(diff)
+    return null
 }
 
 export default {
     getAll,
-    getById,
+    getBy,
     create,
     remove,
     update,

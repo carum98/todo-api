@@ -25,9 +25,9 @@ async function get(_, res) {
  */
 async function getById(req, res) {
     const { id } = req.params
-    const data = await User.getById(parseInt(id))
+    const data = await User.getBy({ id: parseInt(id) })
 
-    if (data) {
+    if (data && !Array.isArray(data)) {
         return res.status(200).json(data.toJson())
     } else {
         return res.status(404).json({ message: 'User not found' })

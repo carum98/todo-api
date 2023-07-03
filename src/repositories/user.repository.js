@@ -10,14 +10,34 @@ async function getAll() {
 }
 
 /**
- * @param {number} id 
- * @returns {Promise<object>}
+ * @param {object} params
+ * @param {number} [params.id]
+ * @param {string} [params.name]
+ * @param {string} [params.user_name]
+ * @param {string} [params.password]
+ * @param {string} [condition]
+ * @returns {Promise<object | object[] | null>}
  */
-async function getById(id) {
-    const sql = `SELECT * FROM users WHERE id = ${id}`
-    const [user] = await query(sql)
+async function getBy(params, condition = 'AND') {
+    const values = []
 
-    return user
+    for (const [key, value] of Object.entries(params)) {
+        values.push(`${key} = '${value}'`)
+    }
+
+    const sql = `SELECT * FROM users WHERE ${values.join(` ${condition} `)}`
+
+    const data = await query(sql)
+
+    if (data.length === 0) {
+        return null
+    }
+
+    if (data.length === 1) {
+        return data[0]
+    } else {
+        return data
+    }
 }
 
 /**
@@ -46,7 +66,7 @@ async function remove(id) {
 /**
  * @param {object} param
  * @param {number} param.id
- * @param {object} param.params
+ * @param {{ name: string?, user_name: string?, password: string? }} param.params
  * @returns {Promise<object>}
  */
 async function update({ id, params }) {
@@ -62,7 +82,7 @@ async function update({ id, params }) {
 
 export default {
     getAll,
-    getById,
+    getBy,
     create,
     remove,
     update,
