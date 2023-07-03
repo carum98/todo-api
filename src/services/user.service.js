@@ -1,5 +1,6 @@
 import { User as Repo } from '../repositories/index.js'
 import { User } from '../models/index.js'
+import bcrypt from 'bcrypt'
 
 /**
  * @returns {Promise<User[]>}
@@ -40,7 +41,9 @@ async function getBy(param) {
  * @returns {Promise<User | null>}
  */
 async function create({ name, user_name, password }) {
-    const { insertId } = await Repo.create({ name, user_name, password })
+    const hashedPassword = await bcrypt.hash(password, 10)
+
+    const { insertId } = await Repo.create({ name, user_name, password: hashedPassword })
 
     const user = await getBy({
         id: insertId,

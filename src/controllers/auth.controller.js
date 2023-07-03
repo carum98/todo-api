@@ -1,4 +1,5 @@
 import { User } from '../services/index.js'
+import bcrypt from 'bcrypt'
 
 /**
  * @typedef {import('express').Request} Request
@@ -25,7 +26,7 @@ async function login(req, res) {
     }
 
     // Check if password is correct
-    if (user.password !== password) {
+    if (!await bcrypt.compare(password, user.password)) {
         return res.status(401).json({ message: 'Invalid password' })
     }
 
