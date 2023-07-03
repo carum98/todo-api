@@ -1,4 +1,5 @@
 import mysql from 'mysql2'
+import ConfigDB from '../config/database.conf.js'
 
 /**
  * @param {string} sql
@@ -6,13 +7,7 @@ import mysql from 'mysql2'
  */
 export async function query(sql) {
     try {
-        const con = mysql.createConnection({
-            host: 'db',
-            port: 3306,
-            user: 'root',
-            password: process.env.DB_PASSWORD,
-            database: process.env.DB_DATABASE
-        })
+        const con = mysql.createConnection(ConfigDB)
         
         const [rows, fields] = await con.promise().query(sql)
 

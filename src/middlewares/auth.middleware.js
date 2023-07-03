@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import { User } from '../services/index.js'
+import { User, Token } from '../services/index.js'
 
 /**
  * @typedef {import('express').Request} Request
@@ -22,7 +22,7 @@ export async function AuthMiddleware(req, res, next) {
     }
 
     try {
-        const decoded = jwt.verify(token, process.env.SECRET_TOKEN || 'secret_token')
+        const decoded = Token.verify(token)
 
         const user = await User.getBy({
             user_name: decoded['user_name']

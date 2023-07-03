@@ -88,10 +88,22 @@ async function update({ id, name, user_name, password }) {
     return null
 }
 
+/**
+ * @param {object} param
+ * @param {string} param.user_name 
+ * @returns {Promise<boolean>}
+ */
+async function alreadyExists({ user_name }) {
+    const data = await getBy({ user_name })
+
+    return data !== null
+}
+
 export default {
     getAll,
     getBy,
     create,
     remove,
     update,
+    alreadyExists,
 }

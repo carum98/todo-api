@@ -70,24 +70,4 @@ export class User {
 
         return diff
     }
-
-    generateToken() {
-        const payload = {
-            user_name: this.user_name,
-        }
-
-        const token = jwt.sign(payload, process.env.SECRET_TOKEN || 'secret_token', {
-            expiresIn: '2h',
-        })
-
-        const refreshToken = jwt.sign(payload, process.env.SECRET_REFRESH_TOKEN || 'secret_refresh_token', {
-            expiresIn: '7d',
-        })
-
-        return {
-            token,
-            refreshToken,
-            expiresIn: 7200000,
-        }
-    }
 }
