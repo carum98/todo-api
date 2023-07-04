@@ -1,15 +1,13 @@
-import { query } from '../database/index.js'
+import { SELECT, INSERT, UPDATE, DELETE } from '../database/index.js'
+
+const table = 'refresh_tokens'
 
 /**
  * @param {number} id 
  * @returns {Promise<object>}
  */
 async function get(id) {
-    const sql = `SELECT * FROM refresh_tokens WHERE id = ${id}`
-
-    const [data] = await query(sql)
-
-    return data
+    return await SELECT(table, { id })
 }
 
 /**
@@ -21,21 +19,7 @@ async function get(id) {
  * @returns {Promise<object | null>}
  */
 async function getBy(params, condition = 'AND') {
-    const values = []
-
-    for (const [key, value] of Object.entries(params)) {
-        values.push(`${key} = '${value}'`)
-    }
-
-    const sql = `SELECT * FROM refresh_tokens WHERE ${values.join(` ${condition} `)}`
-
-    const data = await query(sql)
-
-    if (data.length === 0) {
-        return null
-    }
-
-    return data[0]
+    return await SELECT(table, params, condition)
 }
 
 /**
@@ -46,9 +30,7 @@ async function getBy(params, condition = 'AND') {
  * @returns {Promise<object>}
  */
 async function create({ token, user_id }) {
-    const sql = `INSERT INTO refresh_tokens (token, user_id) VALUES ('${token}', '${user_id}')`
-
-    return await query(sql)
+    return INSERT(table, { token, user_id })
 }
 
 /**
@@ -56,9 +38,7 @@ async function create({ token, user_id }) {
  * @returns {Promise<object>}
  */
 async function remove(id) {
-    const sql = `DELETE FROM refresh_tokens WHERE id = ${id}`
-
-    return await query(sql)
+    return DELETE(table, id)
 }
 
 /**
@@ -68,14 +48,7 @@ async function remove(id) {
  * @returns {Promise<object>}
  */
 async function update({ id, params }) {
-    const values = []
-        
-    for (const [key, value] of Object.entries(params)) {
-        values.push(`${key} = '${value}'`)
-    }
-
-    const sql = `UPDATE refresh_tokens SET ${values.join(', ')} WHERE id = ${id}`
-    return await query(sql)
+    return UPDATE(table, id, params)
 }
 
 export default {

@@ -1,4 +1,4 @@
-import { query } from '../database/index.js'
+import { SELECT, INSERT, UPDATE, DELETE } from '../database/index.js'
 
 const table = 'todos'
 
@@ -11,24 +11,7 @@ const table = 'todos'
  * @returns {Promise<object | object[] | null>}
  */
 async function getBy(params, condition = 'AND') {
-    const values = []
-
-    for (const [key, value] of Object.entries(params)) {
-        values.push(`${key} = '${value}'`)
-    }
-
-    const sql = `SELECT * FROM ${table} WHERE ${values.join(` ${condition} `)}`
-    const data = await query(sql)
-
-    if (data.length === 0) {
-        return null
-    }
-
-    if (data.length === 1) {
-        return data[0]
-    } else {
-        return data
-    }
+    return await SELECT(table, params, condition)
 }
 
 /**
@@ -40,19 +23,7 @@ async function getBy(params, condition = 'AND') {
  * @returns {Promise<object>}
  */
 async function create(params) {
-    const keys = Object.keys(params)
-
-    const values = Object.values(params).map(value => {
-        if (typeof value === 'string') {
-            return `'${value}'`
-        } else {
-            return value
-        }
-    })
-
-    const sql = `INSERT INTO ${table} (${keys.join(',')}) VALUES (${values.join(',')})`
-
-    return await query(sql)
+    return await INSERT(table, params)
 }
 
 /**
@@ -65,19 +36,7 @@ async function create(params) {
  * @returns {Promise<object>}
  */
 async function update(id, params) {
-    const values = []
-
-    for (const [key, value] of Object.entries(params)) {
-        if (typeof value === 'string') {
-            values.push(`${key} = '${value}'`)
-        } else {
-            values.push(`${key} = ${value}`)
-        }
-    }
-
-    const sql = `UPDATE ${table} SET ${values.join(',')} WHERE id = ${id}`
-
-    return await query(sql)
+    return await UPDATE(table, id, params)
 }
 
 /**
@@ -85,9 +44,7 @@ async function update(id, params) {
  * @returns {Promise<object>}
  */
 async function remove(id) {
-    const sql = `DELETE FROM ${table} WHERE id = ${id}`
-
-    return await query(sql)
+    return await DELETE(table, id)
 }
 
 export default {

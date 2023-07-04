@@ -1,12 +1,12 @@
-import { query } from '../database/index.js'
+import { SELECT, INSERT, UPDATE, DELETE } from '../database/index.js'
+
+const table = 'users'
 
 /**
  * @returns {Promise<object[]>}
  */
 async function getAll() {
-    const sql = 'SELECT * FROM users'
-
-    return await query(sql)
+    return await SELECT(table)
 }
 
 /**
@@ -19,38 +19,18 @@ async function getAll() {
  * @returns {Promise<object | object[] | null>}
  */
 async function getBy(params, condition = 'AND') {
-    const values = []
-
-    for (const [key, value] of Object.entries(params)) {
-        values.push(`${key} = '${value}'`)
-    }
-
-    const sql = `SELECT * FROM users WHERE ${values.join(` ${condition} `)}`
-
-    const data = await query(sql)
-
-    if (data.length === 0) {
-        return null
-    }
-
-    if (data.length === 1) {
-        return data[0]
-    } else {
-        return data
-    }
+    return await SELECT(table, params, condition)
 }
 
 /**
- * @param {Object} param
- * @param {string} param.name
- * @param {string} param.user_name
- * @param {string} param.password
+ * @param {Object} params
+ * @param {string} params.name
+ * @param {string} params.user_name
+ * @param {string} params.password
  * @returns {Promise<object>}
  */
-async function create({ name, user_name, password }) {
-    const sql = `INSERT INTO users (name, user_name, password) VALUES ('${name}', '${user_name}', '${password}')`
-
-    return await query(sql)
+async function create(params) {
+    return await INSERT(table, params)
 }
 
 /**
@@ -58,9 +38,7 @@ async function create({ name, user_name, password }) {
  * @returns {Promise<object>}
  */
 async function remove(id) {
-    const sql = `DELETE FROM users WHERE id = ${id}`
-
-    return await query(sql)
+    return await DELETE(table, id)
 }
 
 /**
@@ -70,14 +48,7 @@ async function remove(id) {
  * @returns {Promise<object>}
  */
 async function update({ id, params }) {
-    const values = []
-        
-    for (const [key, value] of Object.entries(params)) {
-        values.push(`${key} = '${value}'`)
-    }
-
-    const sql = `UPDATE users SET ${values.join(', ')} WHERE id = ${id}`
-    return await query(sql)
+    return await UPDATE(table, id, params)
 }
 
 export default {
