@@ -1,5 +1,3 @@
-import jwt from 'jsonwebtoken'
-
 /**
  * @typedef {object} UserType
  * @property {string} name
