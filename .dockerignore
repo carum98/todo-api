@@ -1,7 +1,8 @@
-node_modules
+**/node_modules/
+**/dist
 
-Dockerfile
-docker-compose.yml
+Dockerfile.*
+docker-compose*
 
 .db
 .gitignore
