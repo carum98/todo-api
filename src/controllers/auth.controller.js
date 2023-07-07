@@ -32,7 +32,7 @@ async function login(req, res) {
 
     // Generate token
     return res.status(200).json({ 
-        ...Token.generate(user)
+        ...await Token.generate(user)
     })
 }
 
@@ -57,8 +57,8 @@ async function register(req, res) {
     const user = await User.create({ name, user_name, password })
 
     if (user) {
-        return res.status(200).json({ 
-            ...Token.generate(user)
+        return res.status(201).json({ 
+            ...await Token.generate(user)
         })
     }
 
@@ -92,7 +92,7 @@ async function refreshToken(req, res) {
 
         if (user && !Array.isArray(user)) {
             return res.status(200).json({ 
-                ...Token.generate(user)
+                ...await Token.generate(user)
             })
         }
 

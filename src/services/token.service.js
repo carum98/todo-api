@@ -6,9 +6,9 @@ import { User } from '../models/user.model.js'
 
 /**
  * @param {User} user
- * @returns {{ token: string, refreshToken: string, expiredAt: number }}
+ * @returns {Promise<{ token: string, refreshToken: string, expiredAt: number }>}
  */
-function generate(user) {
+async function generate(user) {
     const payload = {
         user_name: user.user_name,
     }
@@ -19,7 +19,7 @@ function generate(user) {
         expiredAt: Date.now() + config.token.expiresIn * 1000,
     }
 
-    RefreshToken.upsert({ 
+    await RefreshToken.upsert({ 
         token: data.refreshToken, 
         user_id: user.id,
     })

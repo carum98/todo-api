@@ -111,3 +111,13 @@ async function query(sql) {
         console.error('Error connecting to database', error)
     }
 }
+
+export async function closeConnection() {
+    try {
+        const con = mysql.createConnection(ConfigDB)
+        
+        await con.promise().end()
+    } catch (error) {
+        console.error('Error closing connection to database', error)
+    }
+}
