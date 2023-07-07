@@ -9,6 +9,7 @@ show_help() {
   echo "Options:"
   echo "  --dev            Run dev container"
   echo "  --prod           Run prod container"
+  echo "  --test           Run test container"
   echo "  --stop           Stop container"
   echo "  --clear          Clear container and volumes (db) and images (todo-api)"
   echo "  --help           Show help"
@@ -20,7 +21,7 @@ while getopts ":h-:" opt; do
   case $opt in 
     (-)
       case "${OPTARG}" in
-        (dev|prod|stop|clear)
+        (dev|prod|stop|clear|test)
           accion="${OPTARG}"
         ;;
         (help)
@@ -54,7 +55,10 @@ case "$accion" in
     docker-compose -f docker-compose.yml -f docker-compose.dev.yml up -d --build
     ;;
   (prod)
-    docker-compose -f docker-compose.yml up -d --build
+    docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d --build
+    ;;
+  (test)
+    docker-compose -f docker-compose.yml -f docker-compose.test.yml up --build --abort-on-container-exit && docker-compose -f docker-compose.yml -f docker-compose.test.yml down
     ;;
   (stop)
     docker-compose down
@@ -63,7 +67,7 @@ case "$accion" in
     docker-compose down -v && rm -rf .db && rm -rf node_modules && docker rmi todo-api
     ;;
   (*)
-    echo "Action no valid: $accion. Use --help to show options."
+    echo "Not valid action: $accion. Use --help to show options."
     exit 1
     ;;
 esac

@@ -1,11 +1,11 @@
 services:
   api:
-    build:
-      context: .
-      dockerfile: Dockerfile.dev
     volumes:
       - /app/node_modules
       - .:/app
+
+    # Install nodemon and run it
+    command: sh -c "npm install -g nodemon && nodemon ."
   
   db:
     ports:
