@@ -4,6 +4,7 @@
  * @property {string} description
  * @property {boolean} is_complete
  * @property {number} user_id
+ * @property {number} list_id
  */
 
 /**
@@ -18,15 +19,17 @@ export class Todo {
      * @param {string} data.description
      * @param {boolean} data.is_complete
      * @param {number} data.user_id
+     * @param {number} data.list_id
      */
     constructor(data) {
-        const { id, title, description, is_complete, user_id } = data
+        const { id, title, description, is_complete, user_id, list_id } = data
 
         this.id = id
         this.title = title
         this.description = description
         this.is_complete = Boolean(is_complete)
         this.user_id = user_id
+        this.list_id = list_id
 
         Object.freeze(this)
     }
@@ -54,6 +57,7 @@ export class Todo {
             description: params.description ?? this.description,
             is_complete: params.is_complete ?? this.is_complete,
             user_id: params.user_id ?? this.user_id,
+            list_id: params.list_id ?? this.list_id,
         })
     }
 

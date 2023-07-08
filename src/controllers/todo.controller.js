@@ -50,16 +50,17 @@ async function getById(req, res) {
  * @returns {Promise<Response>}
  */
 async function create(req, res) {
-    const { title, description } = req.body
+    const { title, description, list_id } = req.body
 
-    if (!(title && description)) {
+    if (!(title && description && list_id)) {
         return res.status(400).json({ message: 'Invalid data' });
     }
 
     const data = await Todo.create({ 
         title, 
         description, 
-        user_id: parseInt(req['user'].id)
+        user_id: parseInt(req['user'].id),
+        list_id: parseInt(list_id),
      })
 
     if (data) {
@@ -76,13 +77,13 @@ async function create(req, res) {
  */
 async function update(req, res) {
     const { id } = req.params
-    const { title, description, is_complete, user_id } = req.body
+    const { title, description, is_complete, user_id, list_id } = req.body
 
-    if (!(title || description || (is_complete !== undefined) || user_id)) {
+    if (!(title || description || (is_complete !== undefined) || user_id || list_id)) {
         return res.status(400).json({ message: 'Invalid data' });
     }
 
-    const data = await Todo.update(parseInt(id), { title, description, is_complete, user_id })
+    const data = await Todo.update(parseInt(id), { title, description, is_complete, user_id, list_id })
 
     if (data) {
         return res.status(200).json(data.toJson())
