@@ -1,5 +1,5 @@
 import mysql from 'mysql2'
-import ConfigDB from '../config/database.conf.js'
+import ConfigDB from '../../config/database.conf.js'
 
 /**
  * Helper function to execute a query `SELECT` in the database

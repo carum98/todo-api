@@ -1,5 +1,5 @@
 import jwt from 'jsonwebtoken'
-import config from '../config/token.conf.js'
+import config from '../../config/token.conf.js'
 
 import { RefreshToken } from './index.js'
 import { User } from '../models/user.model.js'
