@@ -1,4 +1,4 @@
-import { Todo } from '../services/index.js'
+import { Todo, List } from '../services/index.js'
 
 /**
  * @typedef {import('express').Request} Request
@@ -56,12 +56,24 @@ async function create(req, res) {
         return res.status(400).json({ message: 'Invalid data' });
     }
 
+    const user_id_number = parseInt(req['user'].id)
+    const list_id_number = parseInt(list_id)
+
+    const list = await List.getBy({ 
+        id: list_id_number, 
+        user_id: user_id_number 
+    })
+
+    if (!list) {
+        return res.status(404).json({ message: 'List not found' })
+    }
+
     const data = await Todo.create({ 
         title, 
         description, 
-        user_id: parseInt(req['user'].id),
-        list_id: parseInt(list_id),
-     })
+        user_id: user_id_number,
+        list_id: list_id_number,
+    })
 
     if (data) {
         return res.status(201).json(data.toJson())

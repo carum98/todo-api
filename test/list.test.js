@@ -180,4 +180,104 @@ describe('List', () => {
             expect(response.status).toBe(204)
         })
     })
+
+    describe('Create Todo', () => {
+        let listId = null
+
+        beforeAll(async () => {
+            const response = await request(app).post('/lists').send({
+                name: 'test',
+                color: '#000000'
+            })
+            .set('Authorization', `Bearer ${token}`)
+
+            listId = response.body.id
+        })
+
+        test('should return 404 (list not found)', async () => {
+            const response = await request(app).post('/lists/99/todos').send({
+                title: 'test',
+                description: 'test',
+            })
+            .set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(404)
+        })
+
+        test('should return 400 (invalid data)', async () => {
+            const response = await request(app).post(`/lists/${listId}/todos`).send({
+                name2: 'test'
+            })
+            .set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(400)
+        })
+
+        test('should return 201 (todo created)', async () => {
+            const response = await request(app).post(`/lists/${listId}/todos`).send({
+                title: 'test',
+                description: 'test',
+            })
+            .set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(201)
+
+            expect(response.body).toMatchObject({
+                id: expect.any(Number),
+                title: expect.any(String),
+                description: expect.any(String),
+                is_complete: expect.any(Boolean),
+            })
+
+            expect(response.body).toMatchObject({
+                id: expect.any(Number),
+                title: 'test',
+                description: 'test',
+                is_complete: false,
+            })
+        })
+    })
+
+    describe('Get Todos', () => {
+        let listId = null
+
+        beforeAll(async () => {
+            const response = await request(app).post('/lists').send({
+                name: 'test',
+                color: '#000000'
+            })
+            .set('Authorization', `Bearer ${token}`)
+
+            listId = response.body.id
+
+            await request(app).post(`/lists/${listId}/todos`).send({
+                title: 'test_prueba',
+                description: 'test',
+            })
+            .set('Authorization', `Bearer ${token}`)
+        })
+
+        test('should return 404 (list not found)', async () => {
+            const response = await request(app).get('/lists/99/todos').set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(404)
+        })
+
+        test('should return 200 (todos found)', async () => {
+            const response = await request(app).get(`/lists/${listId}/todos`).set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(200)
+
+            expect(response.body).toMatchObject({
+                data: expect.arrayContaining([
+                    expect.objectContaining({
+                        id: expect.any(Number),
+                        title: 'test_prueba',
+                        description: 'test',
+                        is_complete: false,
+                    })
+                ])
+            })
+        })
+    })
 })

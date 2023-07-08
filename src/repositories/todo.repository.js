@@ -6,6 +6,7 @@ const table = 'todos'
  * @param {object} params 
  * @param {number} [params.id]
  * @param {number} [params.user_id]
+ * @param {number} [params.list_id]
  * @param {boolean} [params.is_complete]
  * @param {string} [condition]
  * @returns {Promise<object | object[] | null>}

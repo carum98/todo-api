@@ -1,4 +1,5 @@
-import { List } from '../services/index.js'
+import { List, Todo } from '../services/index.js'
+import { Todo as TodoController } from './index.js'
 
 /**
  * @typedef {import('express').Request} Request
@@ -107,10 +108,47 @@ async function remove(req, res) {
     }
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
+async function getTodos(req, res) {
+    const { id } = req.params
+
+    const user_id = parseInt(req['user'].id)
+    const list_id = parseInt(id)
+
+    const data = await Todo.getBy({ list_id, user_id })
+
+    if (data) {
+        return res.status(200).json({ 
+            data: Array.isArray(data) ? data.map(item => item.toJson()) : [data.toJson()]
+        })
+    } else {
+        return res.status(404).json({ message: 'List not found' })
+    }
+}
+
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
+async function createTodo(req, res) {
+    const { id } = req.params
+
+    req.body.list_id = id
+
+    return await TodoController.create(req, res)
+}
+
 export default {
     get,
     getById,
     create,
     update,
     remove,
+    getTodos,
+    createTodo
 }

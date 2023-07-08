@@ -5,6 +5,7 @@ import { Todo } from '../models/index.js'
  * @param {object} params
  * @param {number} [params.id]
  * @param {number} [params.user_id]
+ * @param {number} [params.list_id]
  * @param {boolean} [params.is_complete]
  * @returns {Promise<Todo[] | Todo | null>}
  */

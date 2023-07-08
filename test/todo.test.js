@@ -74,6 +74,8 @@ describe('Todo', () => {
                 description: expect.any(String),
                 is_complete: expect.any(Boolean),
             })
+
+            expect(response.body.is_complete).toBe(false)
         })
     })
 
