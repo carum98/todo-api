@@ -1,4 +1,3 @@
-import e from 'express'
 import app from '../src/app.js'
 import request from 'supertest'
 
