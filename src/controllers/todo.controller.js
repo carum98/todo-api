@@ -91,11 +91,19 @@ async function update(req, res) {
     const { id } = req.params
     const { title, description, is_complete, user_id, list_id } = req.body
 
+    const params = {
+        title, 
+        description, 
+        is_complete, 
+        user_id, 
+        list_id
+    }
+
     if (!(title || description || (is_complete !== undefined) || user_id || list_id)) {
         return res.status(400).json({ message: 'Invalid data' });
     }
 
-    const data = await Todo.update(parseInt(id), { title, description, is_complete, user_id, list_id })
+    const data = await Todo.update(parseInt(id), params)
 
     if (data) {
         return res.status(200).json(data.toJson())
@@ -120,10 +128,27 @@ async function remove(req, res) {
     }
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
+async function complete(req, res) {
+    const { id } = req.params
+    const data = await Todo.update(parseInt(id), { is_complete: true })
+
+    if (data) {
+        return res.status(200).json(data.toJson())
+    } else {
+        return res.status(404).json({ message: 'Todo not found' })
+    }
+}
+
 export default {
     get,
     getById,
     create,
     update,
     remove,
+    complete
 }

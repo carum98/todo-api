@@ -61,11 +61,9 @@ async function remove(id) {
 /**
  * @param {number} id 
  * @param {object} params
- * @param {string} params.title
- * @param {string} params.description
- * @param {boolean} params.is_complete
- * @param {number} params.user_id
- * @param {number} params.list_id
+ * @param {string} [params.title]
+ * @param {string} [params.description]
+ * @param {boolean} [params.is_complete]
  * @returns {Promise<Todo | null>}
  */
 async function update(id, params) {

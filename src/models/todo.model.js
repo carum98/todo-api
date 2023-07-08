@@ -62,7 +62,10 @@ export class Todo {
     }
 
     /**
-     * @param {TodoType} params
+     * @param {Object} data
+     * @param {string} [data.title]
+     * @param {string} [data.description]
+     * @param {boolean} [data.is_complete]
      * @returns {object}
      */
     valuesDiffFrom({ title, description, is_complete }) {

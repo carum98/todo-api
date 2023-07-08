@@ -145,4 +145,49 @@ describe('Todo', () => {
             expect(response.status).toBe(204)
         })
     })
+
+    describe('Mark as complete', () => {
+        test('should return 401 (invalid token)', async () => {
+            const response = await request(app).put('/todos/1/complete')
+
+            expect(response.status).toBe(401)
+        })
+
+        test('should return 404 (todo not found)', async () => {
+            const response = await request(app).put('/todos/100/complete').set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(404)
+        })
+
+        test('should return 200 (todo updated)', async () => {
+            // Create list
+            const list = await request(app).post('/lists').send({
+                name: 'test',
+                color: '#000000'
+            }).set('Authorization', `Bearer ${token}`)
+
+            const listId = list.body.id
+
+            expect(list.status).toBe(201)
+
+            // Create todo
+            const todo = await request(app).post('/todos').send({
+                title: 'test',
+                description: 'test',
+                list_id: listId
+            }).set('Authorization', `Bearer ${token}`)
+
+            expect(todo.status).toBe(201)
+            expect(todo.body.is_complete).toBe(false)
+
+            const todoId = todo.body.id
+
+            console.log(todoId)
+
+            const response = await request(app).post(`/todos/${todoId}/complete`).set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(200)
+            expect(response.body.is_complete).toBe(true)
+        })
+    })
 })

@@ -10,4 +10,6 @@ router.get('/:id', Todo.getById)
 router.put('/:id', Todo.update)
 router.delete('/:id', Todo.remove)
 
+router.post('/:id/complete', Todo.complete)
+
 export default router
