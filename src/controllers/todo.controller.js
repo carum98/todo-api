@@ -144,11 +144,35 @@ async function complete(req, res) {
     }
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
+async function toggle(req, res) {
+    const { id } = req.params
+    const data = await Todo.getBy({ id: parseInt(id) })
+
+    if (data && !Array.isArray(data)) {
+        const is_complete = !data.is_complete
+        const updated = await Todo.update(parseInt(id), { is_complete })
+
+        if (updated) {
+            return res.status(200).json(updated.toJson())
+        } else {
+            return res.status(400).json({ message: 'Todo not updated' })
+        }
+    } else {
+        return res.status(404).json({ message: 'Todo not found' })
+    }
+}
+
 export default {
     get,
     getById,
     create,
     update,
     remove,
-    complete
+    complete,
+    toggle,
 }

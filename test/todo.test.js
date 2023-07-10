@@ -182,12 +182,58 @@ describe('Todo', () => {
 
             const todoId = todo.body.id
 
-            console.log(todoId)
-
             const response = await request(app).post(`/todos/${todoId}/complete`).set('Authorization', `Bearer ${token}`)
 
             expect(response.status).toBe(200)
             expect(response.body.is_complete).toBe(true)
+        })
+    })
+
+    describe('Toggle complete', () => {
+        test('should return 401 (invalid token)', async () => {
+            const response = await request(app).put('/todos/1/toggle-complete')
+
+            expect(response.status).toBe(401)
+        })
+
+        test('should return 404 (todo not found)', async () => {
+            const response = await request(app).put('/todos/100/toggle-complete').set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(404)
+        })
+
+        test('should return 200 (todo updated)', async () => {
+            // Create list
+            const list = await request(app).post('/lists').send({
+                name: 'test',
+                color: '#000000'
+            }).set('Authorization', `Bearer ${token}`)
+
+            const listId = list.body.id
+
+            expect(list.status).toBe(201)
+
+            // Create todo
+            const todo = await request(app).post('/todos').send({
+                title: 'test',
+                description: 'test',
+                list_id: listId
+            }).set('Authorization', `Bearer ${token}`)
+
+            expect(todo.status).toBe(201)
+            expect(todo.body.is_complete).toBe(false)
+
+            const todoId = todo.body.id
+
+            const response = await request(app).post(`/todos/${todoId}/toggle`).set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(200)
+            expect(response.body.is_complete).toBe(true)
+
+            const response2 = await request(app).post(`/todos/${todoId}/toggle`).set('Authorization', `Bearer ${token}`)
+
+            expect(response2.status).toBe(200)
+            expect(response2.body.is_complete).toBe(false)
         })
     })
 })
