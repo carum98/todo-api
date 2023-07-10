@@ -119,15 +119,19 @@ async function getTodos(req, res) {
     const user_id = parseInt(req['user'].id)
     const list_id = parseInt(id)
 
-    const data = await Todo.getBy({ list_id, user_id })
+    const list = await List.getBy({ id: list_id, user_id })
 
-    if (data) {
-        return res.status(200).json({ 
-            data: Array.isArray(data) ? data.map(item => item.toJson()) : [data.toJson()]
-        })
-    } else {
+    if (!list) {
         return res.status(404).json({ message: 'List not found' })
     }
+
+    const data = await Todo.getBy({ list_id, user_id })
+
+    return res.status(200).json({ 
+        data: data === null 
+            ? [] 
+            : Array.isArray(data) ? data.map(item => item.toJson()) : [data.toJson()]
+    })
 }
 
 /**
