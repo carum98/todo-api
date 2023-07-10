@@ -45,24 +45,25 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 ```
 
 ## End-Points
-| Method | End-Point         |                              |
-|--------|-------------------|------------------------------|
-|`POST`  |`/register`           |[See](#post-register)      |
-|`POST`  |`/login`              |[See](#post-login)         |
-|`POST`  |`/refresh-token`      |[See](#post-refresh-token) |
-|`POST`  |`/lists`              |[See](#post-lists)         |
-|`GET`   |`/lists`              |[See](#get-lists)          |
-|`GET`   |`/lists/:id`          |[See](#get-listsid)        |
-|`PUT`   |`/lists/:id`          |[See](#put-listsid)        |
-|`DELETE`|`/lists/:id`          |[See](#delete-listsid)     |
-|`POST`  |`/lists/:id/todos`    |[See](#post-listsidtodos)  |
-|`GET`   |`/lists/:id/todos`    |[See](#get-listsidtodos)   |
-|`POST`  |`/todos`              |[See](#post-todos)         |
-|`GET`   |`/todos`              |[See](#get-todos)          |
-|`GET`   |`/todos/:id`          |[See](#get-todosid)        |
-|`PUT`   |`/todos/:id`          |[See](#put-todosid)        |
-|`POST`  |`/todos/:id/complete` |[See](#delete-todosid)     |
-|`DELETE`|`/todos/:id`          |[See](#delete-todosid)     |
+| Method | End-Point         |                                |
+|--------|-------------------|--------------------------------|
+|`POST`  |`/register`           |[See](#post-register)        |
+|`POST`  |`/login`              |[See](#post-login)           |
+|`POST`  |`/refresh-token`      |[See](#post-refresh-token)   |
+|`POST`  |`/lists`              |[See](#post-lists)           |
+|`GET`   |`/lists`              |[See](#get-lists)            |
+|`GET`   |`/lists/:id`          |[See](#get-listsid)          |
+|`PUT`   |`/lists/:id`          |[See](#put-listsid)          |
+|`DELETE`|`/lists/:id`          |[See](#delete-listsid)       |
+|`POST`  |`/lists/:id/todos`    |[See](#post-listsidtodos)    |
+|`GET`   |`/lists/:id/todos`    |[See](#get-listsidtodos)     |
+|`POST`  |`/todos`              |[See](#post-todos)           |
+|`GET`   |`/todos`              |[See](#get-todos)            |
+|`GET`   |`/todos/:id`          |[See](#get-todosid)          |
+|`PUT`   |`/todos/:id`          |[See](#put-todosid)          |
+|`POST`  |`/todos/:id/complete` |[See](#post-todosidcomplete) |
+|`POST`  |`/todos/:id/toggle`   |[See](#post-todosidtoggle)   |
+|`DELETE`|`/todos/:id`          |[See](#delete-todosid)       |
 
 ------
 
@@ -273,6 +274,16 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 }
 ```
 #### POST /todos/:id/complete
+##### Response
+```json
+{
+    "id": 1,
+    "title": "TODO Test",
+    "description": "This is a todo description",
+    "is_complete": true
+}
+```
+#### POST /todos/:id/toggle
 ##### Response
 ```json
 {
