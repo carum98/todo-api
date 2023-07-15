@@ -19,7 +19,7 @@ async function get(id) {
  * @returns {Promise<object | null>}
  */
 async function getBy(params, condition = 'AND') {
-    return await SELECT(table, params, condition)
+    return await SELECT(table, params, { condition })
 }
 
 /**

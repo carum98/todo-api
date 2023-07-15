@@ -4,14 +4,17 @@ import ConfigDB from '../../config/database.conf.js'
 /**
  * Helper function to execute a query `SELECT` in the database
  * 
- * @param {string} table       - Table name
- * @param {object} [params]    - Object with key-value pairs to filter the query
- * @param {string} [condition] - Condition to be used in the query (AND or OR)
+ * @param {string} table              - Table name
+ * @param {object} [params]           - Object with key-value pairs to filter the query
+ * @param {object} [config]           - Object with configuration for the query
+ * @param {string} [config.orderBy]   - Column to be used in the `ORDER BY` clause
+ * @param {string} [config.order]     - Order to be used in the `ORDER BY` clause (ASC or DESC)
+ * @param {string} [config.condition] - Condition to be used in the query (AND or OR)
  * @returns {Promise<object | object[] | null>}
  */
-export async function SELECT(table, params, condition = 'AND') {
+export async function SELECT(table, params, { condition = 'AND', orderBy = 'id', order = 'ASC' } = {}) {
     if (!params) {
-        return await query(`SELECT * FROM ${table}`)
+        return await query(`SELECT * FROM ${table} ORDER BY ${orderBy} ${order}`)
     }
 
     const values = []
@@ -20,7 +23,7 @@ export async function SELECT(table, params, condition = 'AND') {
         values.push(`${key} = '${value}'`)
     }
 
-    const sql = `SELECT * FROM ${table} WHERE ${values.join(` ${condition} `)}`
+    const sql = `SELECT * FROM ${table} WHERE ${values.join(` ${condition} `)} ORDER BY ${orderBy} ${order}`
     const data = await query(sql)
 
     if (data.length === 0) {
@@ -92,6 +95,29 @@ export async function DELETE(table, id) {
     const sql = `DELETE FROM ${table} WHERE id = ${id}`
 
     return await query(sql)
+}
+
+/**
+ * Helper function to execute a query `COUNT` in the database
+ * 
+ * @param {string} table 
+ * @param {object} params 
+ * @returns {Promise<object>}
+ */
+export async function COUNT(table, params) {
+    const values = []
+
+    for (const [key, value] of Object.entries(params)) {
+        if (typeof value === 'string') {
+            values.push(`${key} = '${value}'`)
+        } else {
+            values.push(`${key} = ${value}`)
+        }
+    }
+
+    const sql = `SELECT COUNT(*) as count FROM ${table} WHERE ${values.join(',')}`
+
+    return await query(sql).then(data => data[0].count)
 }
 
 /**

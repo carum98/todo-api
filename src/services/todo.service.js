@@ -31,9 +31,14 @@ async function getBy(params) {
  * @returns {Promise<Todo | null>}
  */
 async function create(params) {
+    const count = await Repo.count({
+        list_id: params.list_id,
+    })
+
     const { insertId } = await Repo.create({
         ...params,
         is_complete: false,
+        position: count + 1,
     })
 
     const todo = await getBy({

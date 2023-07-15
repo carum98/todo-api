@@ -1,4 +1,4 @@
-import { SELECT, INSERT, UPDATE, DELETE } from '../database/index.js'
+import { SELECT, INSERT, UPDATE, DELETE, COUNT } from '../database/index.js'
 
 const table = 'todos'
 
@@ -12,7 +12,7 @@ const table = 'todos'
  * @returns {Promise<object | object[] | null>}
  */
 async function getBy(params, condition = 'AND') {
-    return await SELECT(table, params, condition)
+    return await SELECT(table, params, { condition, orderBy: 'position' })
 }
 
 /**
@@ -20,6 +20,7 @@ async function getBy(params, condition = 'AND') {
  * @param {string} params.title
  * @param {boolean} params.is_complete
  * @param {number} params.user_id
+ * @param {number} params.position
  * @returns {Promise<object>}
  */
 async function create(params) {
@@ -46,9 +47,19 @@ async function remove(id) {
     return await DELETE(table, id)
 }
 
+/**
+ * @param {object} params
+ * @param {number} params.list_id 
+ * @returns {Promise<object>}
+ */
+async function count(params) {
+    return await COUNT(table, params)
+}
+
 export default {
     getBy,
     create,
     update,
-    remove
+    remove,
+    count,
 }
