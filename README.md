@@ -63,6 +63,7 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 |`PUT`   |`/todos/:id`          |[See](#put-todosid)          |
 |`POST`  |`/todos/:id/complete` |[See](#post-todosidcomplete) |
 |`POST`  |`/todos/:id/toggle`   |[See](#post-todosidtoggle)   |
+|`POST`  |`/todos/:id/move`     |[See](#post-todosidmove)     |
 |`DELETE`|`/todos/:id`          |[See](#delete-todosid)       |
 
 ------
@@ -281,6 +282,30 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
     "id": 1,
     "title": "TODO Test",
     "is_complete": true
+}
+```
+#### POST /todos/:id/move
+##### Request
+```json
+{
+    "position": 2
+}
+```
+##### Response
+```json
+{
+    "data": [
+        {
+            "id": 2,
+            "title": "TODO Test Carlos",
+            "is_complete": false
+        },
+        {
+            "id": 1,
+            "title": "TODO Test",
+            "is_complete": false
+        }
+    ]
 }
 ```
 #### DELETE /todos/:id
