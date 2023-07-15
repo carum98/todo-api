@@ -5,7 +5,6 @@ CREATE TABLE `todos` (
     `user_id` int NOT NULL,
     `list_id` int NOT NULL,
     `title` text NOT NULL,
-    `description` text NOT NULL,
     `is_complete` boolean NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id),

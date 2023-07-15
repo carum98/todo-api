@@ -197,7 +197,6 @@ describe('List', () => {
         test('should return 404 (list not found)', async () => {
             const response = await request(app).post('/lists/99/todos').send({
                 title: 'test',
-                description: 'test',
             })
             .set('Authorization', `Bearer ${token}`)
 
@@ -216,7 +215,6 @@ describe('List', () => {
         test('should return 201 (todo created)', async () => {
             const response = await request(app).post(`/lists/${listId}/todos`).send({
                 title: 'test',
-                description: 'test',
             })
             .set('Authorization', `Bearer ${token}`)
 
@@ -225,14 +223,12 @@ describe('List', () => {
             expect(response.body).toMatchObject({
                 id: expect.any(Number),
                 title: expect.any(String),
-                description: expect.any(String),
                 is_complete: expect.any(Boolean),
             })
 
             expect(response.body).toMatchObject({
                 id: expect.any(Number),
                 title: 'test',
-                description: 'test',
                 is_complete: false,
             })
         })
@@ -252,7 +248,6 @@ describe('List', () => {
 
             await request(app).post(`/lists/${listId}/todos`).send({
                 title: 'test_prueba',
-                description: 'test',
             })
             .set('Authorization', `Bearer ${token}`)
         })
@@ -273,7 +268,6 @@ describe('List', () => {
                     expect.objectContaining({
                         id: expect.any(Number),
                         title: 'test_prueba',
-                        description: 'test',
                         is_complete: false,
                     })
                 ])

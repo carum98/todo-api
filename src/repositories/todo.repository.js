@@ -18,7 +18,6 @@ async function getBy(params, condition = 'AND') {
 /**
  * @param {object} params
  * @param {string} params.title
- * @param {string} params.description
  * @param {boolean} params.is_complete
  * @param {number} params.user_id
  * @returns {Promise<object>}
@@ -31,7 +30,6 @@ async function create(params) {
  * @param {number} id 
  * @param {object} params
  * @param {string} params.title
- * @param {string} params.description
  * @param {boolean} params.is_complete
  * @param {number} params.user_id
  * @returns {Promise<object>}

@@ -182,7 +182,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 ```json
 {
     "title": "TODO Test",
-    "description": "This is a todo description"
 }
 ```
 ##### Response
@@ -190,7 +189,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "title": "TODO Test",
-    "description": "This is a todo description",
     "is_complete": false
 }
 ```
@@ -202,7 +200,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
         {
             "id": 1,
             "title": "TODO Test",
-            "description": "This is a todo description",
             "is_complete": false
         }
     ]
@@ -220,7 +217,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 ```json
 {
     "title": "TODO Test",
-    "description": "This is a todo description",
     "list_id": 1
 }
 ```
@@ -229,7 +225,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "title": "TODO Test",
-    "description": "This is a todo description",
     "is_complete": false
 }
 ```
@@ -241,7 +236,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
         {
             "id": 1,
             "title": "TODO Test",
-            "description": "This is a todo description",
             "is_complete": false
         }
     ]
@@ -253,7 +247,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "title": "TODO Test",
-    "description": "This is a todo description",
     "is_complete": false
 }
 ```
@@ -269,7 +262,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "title": "TODO Test Edit",
-    "description": "This is a todo description",
     "is_complete": false
 }
 ```
@@ -279,7 +271,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "title": "TODO Test",
-    "description": "This is a todo description",
     "is_complete": true
 }
 ```
@@ -289,7 +280,6 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "title": "TODO Test",
-    "description": "This is a todo description",
     "is_complete": true
 }
 ```

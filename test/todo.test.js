@@ -47,7 +47,6 @@ describe('Todo', () => {
         test('should return 401 (invalid token)', async () => {
             const response = await request(app).post('/todos').send({
                 title: 'test',
-                description: 'test'
             })
 
             expect(response.status).toBe(401)
@@ -62,7 +61,6 @@ describe('Todo', () => {
         test('should return 201 (todo created)', async () => {
             const response = await request(app).post('/todos').send({
                 title: 'test',
-                description: 'test',
                 list_id: listId
             }).set('Authorization', `Bearer ${token}`)
 
@@ -71,7 +69,6 @@ describe('Todo', () => {
             expect(response.body).toMatchObject({
                 id: expect.any(Number),
                 title: expect.any(String),
-                description: expect.any(String),
                 is_complete: expect.any(Boolean),
             })
 
@@ -83,7 +80,6 @@ describe('Todo', () => {
         test('should return 401 (invalid token)', async () => {
             const response = await request(app).put('/todos/1').send({
                 title: 'test',
-                description: 'test'
             })
 
             expect(response.status).toBe(401)
@@ -100,7 +96,6 @@ describe('Todo', () => {
         test('should return 404 (todo not found)', async () => {
             const response = await request(app).put('/todos/100').send({
                 title: 'test',
-                description: 'test'
             }).set('Authorization', `Bearer ${token}`)
 
             expect(response.status).toBe(404)
@@ -109,7 +104,6 @@ describe('Todo', () => {
         test('should return 200 (todo updated)', async () => {
             const response = await request(app).put('/todos/1').send({
                 title: 'test_updated',
-                description: 'test_updated'
             }).set('Authorization', `Bearer ${token}`)
 
             expect(response.status).toBe(200)
@@ -117,12 +111,10 @@ describe('Todo', () => {
             expect(response.body).toMatchObject({
                 id: expect.any(Number),
                 title: expect.any(String),
-                description: expect.any(String),
                 is_complete: expect.any(Boolean),
             })
             
             expect(response.body.title).toBe('test_updated')
-            expect(response.body.description).toBe('test_updated')
         })
     })
 
@@ -173,7 +165,6 @@ describe('Todo', () => {
             // Create todo
             const todo = await request(app).post('/todos').send({
                 title: 'test',
-                description: 'test',
                 list_id: listId
             }).set('Authorization', `Bearer ${token}`)
 
@@ -216,7 +207,6 @@ describe('Todo', () => {
             // Create todo
             const todo = await request(app).post('/todos').send({
                 title: 'test',
-                description: 'test',
                 list_id: listId
             }).set('Authorization', `Bearer ${token}`)
 

@@ -26,7 +26,6 @@ async function getBy(params) {
 /**
  * @param {object} params
  * @param {string} params.title
- * @param {string} params.description
  * @param {number} params.user_id
  * @param {number} params.list_id
  * @returns {Promise<Todo | null>}
@@ -62,7 +61,6 @@ async function remove(id) {
  * @param {number} id 
  * @param {object} params
  * @param {string} [params.title]
- * @param {string} [params.description]
  * @param {boolean} [params.is_complete]
  * @returns {Promise<Todo | null>}
  */
