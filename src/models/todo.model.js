@@ -64,12 +64,14 @@ export class Todo {
      * @param {Object} data
      * @param {string} [data.title]
      * @param {boolean} [data.is_complete]
+     * @param {number} [data.position]
      * @returns {object}
      */
-    valuesDiffFrom({ title, is_complete }) {
+    valuesDiffFrom({ title, is_complete, position }) {
         const diff = {
             title: this.title !== title ? title : undefined,
             is_complete: this.is_complete !== is_complete ? is_complete : undefined,
+            position: this.position !== position ? position : undefined,
         }
 
         // Remove undefined values

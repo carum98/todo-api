@@ -127,14 +127,19 @@ export async function COUNT(table, params) {
  * @returns {Promise<object[] | object>}
  */
 async function query(sql) {
+    let con = null
     try {
-        const con = mysql.createConnection(ConfigDB)
+        con = mysql.createConnection(ConfigDB)
         
         const [rows, fields] = await con.promise().query(sql)
 
         return rows
     } catch (error) {
         console.error('Error connecting to database', error)
+    } finally {
+        if (con) {
+            await con.promise().end()
+        }
     }
 }
 

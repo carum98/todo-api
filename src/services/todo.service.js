@@ -67,6 +67,7 @@ async function remove(id) {
  * @param {object} params
  * @param {string} [params.title]
  * @param {boolean} [params.is_complete]
+ * @param {number} [params.position]
  * @returns {Promise<Todo | null>}
  */
 async function update(id, params) {
@@ -74,6 +75,10 @@ async function update(id, params) {
 
     if (todo && !Array.isArray(todo)) {
         const diff = todo.valuesDiffFrom(params)
+
+        if (Object.keys(diff).length === 0) {
+            return todo
+        }
 
         await Repo.update(id, diff )
     

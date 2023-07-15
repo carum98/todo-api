@@ -165,6 +165,45 @@ async function toggle(req, res) {
     }
 }
 
+/**
+ * @param {Request} req
+ * @param {Response} res 
+ * @returns {Promise<Response>}
+ */
+async function move(req, res) {
+    const { id } = req.params
+    const { position } = req.body
+
+    if (!position) {
+        return res.status(400).json({ message: 'Invalid data' })
+    }
+
+    const data = await Todo.getBy({ id: parseInt(id) })
+
+    if (data === null || Array.isArray(data)) {
+        return res.status(404).json({ message: 'Todo not found' })
+    }
+
+    const todos = await Todo.getBy({ list_id: data.list_id })
+
+    if (todos === null || !Array.isArray(todos)) {
+        return res.status(404).json({ message: 'Todos not found' })
+    }
+
+    // Check if the position is valid
+    if (position < 1 || position > todos.length) {
+        return res.status(400).json({ message: 'Invalid position' })
+    }
+
+    // Move into the array to the new position
+    todos.splice(position - 1, 0, todos.splice(data.position - 1, 1)[0])
+
+    // Update the position of each todo
+    await Promise.all(todos.map((item, index) => Todo.update(item.id, { position: index + 1 })))
+
+    return res.status(200).json({ message: 'Todos updated' })
+}
+
 export default {
     get,
     getById,
@@ -173,4 +212,5 @@ export default {
     remove,
     complete,
     toggle,
+    move,
 }

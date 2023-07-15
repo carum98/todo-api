@@ -12,5 +12,6 @@ router.delete('/:id', Todo.remove)
 
 router.post('/:id/complete', Todo.complete)
 router.post('/:id/toggle', Todo.toggle)
+router.post('/:id/move', Todo.move)
 
 export default router

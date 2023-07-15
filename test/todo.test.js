@@ -226,4 +226,82 @@ describe('Todo', () => {
             expect(response2.body.is_complete).toBe(false)
         })
     })
+
+    describe('Move', () => {
+        let listId = null
+        let todoId = null
+
+        beforeAll(async () => {
+            const response = await request(app).post('/lists').send({
+                name: 'test',
+                color: '#000000'
+            })
+            .set('Authorization', `Bearer ${token}`)
+
+            listId = response.body.id
+
+            const response1 = await request(app).post(`/lists/${listId}/todos`).send({
+                title: 'test_1',
+            }).set('Authorization', `Bearer ${token}`)
+
+            todoId = response1.body.id
+
+            await request(app).post(`/lists/${listId}/todos`).send({
+                title: 'test_2',
+            }).set('Authorization', `Bearer ${token}`)
+
+            await request(app).post(`/lists/${listId}/todos`).send({
+                title: 'test_3',
+            }).set('Authorization', `Bearer ${token}`)
+        })
+
+        test('should return 401 (invalid token)', async () => {
+            const response = await request(app).post(`/todos/${todoId}/move`)
+
+            expect(response.status).toBe(401)
+        })
+
+        test('should return 404 (todo not found)', async () => {
+            const response = await request(app).post('/todos/100/move')
+            .send({
+                position: 2
+            })
+            .set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(404)
+        })
+
+        test('should return 400 (invalid position)', async () => {
+            const response = await request(app).post(`/todos/${todoId}/move`).send({
+                position: 4
+            }).set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(400)
+        })
+
+        test('should return 200 (todo moved)', async () => {
+            const response = await request(app).get(`/lists/${listId}/todos`).set('Authorization', `Bearer ${token}`)
+
+            expect(response.status).toBe(200)
+            expect(response.body.data[0].title).toBe('test_1')
+            expect(response.body.data[1].title).toBe('test_2')
+            expect(response.body.data[2].title).toBe('test_3')
+
+            const response2 = await request(app).post(`/todos/${todoId}/move`).send({
+                position: 2
+            }).set('Authorization', `Bearer ${token}`)
+
+            expect(response2.status).toBe(200)
+
+            const response3 = await request(app).get(`/lists/${listId}/todos`).set('Authorization', `Bearer ${token}`)
+            
+            expect(response3.status).toBe(200)
+
+            console.log(response3.body)
+
+            expect(response3.body.data[0].title).toBe('test_2')
+            expect(response3.body.data[1].title).toBe('test_1')
+            expect(response3.body.data[2].title).toBe('test_3')
+        })
+    })
 })
