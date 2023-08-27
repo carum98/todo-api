@@ -9,5 +9,5 @@ CREATE TABLE `todos` (
     `position` int NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (user_id) REFERENCES users(id),
-    FOREIGN KEY (list_id) REFERENCES lists(id)
+    FOREIGN KEY (list_id) REFERENCES lists(id) ON DELETE CASCADE
 );
