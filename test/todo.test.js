@@ -297,8 +297,6 @@ describe('Todo', () => {
             
             expect(response3.status).toBe(200)
 
-            console.log(response3.body)
-
             expect(response3.body.data[0].title).toBe('test_2')
             expect(response3.body.data[1].title).toBe('test_1')
             expect(response3.body.data[2].title).toBe('test_3')

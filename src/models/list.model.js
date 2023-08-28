@@ -3,6 +3,10 @@
  * @property {string} name
  * @property {string} color
  * @property {number} user_id
+ * @property {Object} [count]
+ * @property {number} count.total
+ * @property {number} count.completed
+ * @property {number} count.pending
  */
 
 /**
@@ -16,14 +20,19 @@ export class List {
      * @param {string} data.name
      * @param {string} data.color
      * @param {number} data.user_id
+     * @param {number} [data.total_todos]
+     * @param {number} [data.total_todos_completed]
      */
     constructor(data) {
-        const { id, name, color, user_id } = data
+        const { id, name, color, user_id, total_todos, total_todos_completed } = data
 
         this.id = id
         this.name = name
         this.color = color
         this.user_id = user_id
+        this.count = total_todos != undefined && total_todos_completed != undefined 
+            ? { total: total_todos, completed: total_todos_completed, pending: total_todos - total_todos_completed } 
+            : undefined
 
         Object.freeze(this)
     }
@@ -36,6 +45,11 @@ export class List {
             id: this.id,
             name: this.name,
             color: this.color,
+            count: {
+                completed: this.count?.completed ?? 0,
+                pending: this.count?.pending ?? 0,
+                total: this.count?.total ?? 0,
+            }
         }
     }
 

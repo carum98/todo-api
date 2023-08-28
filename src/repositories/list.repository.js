@@ -9,7 +9,20 @@ const table = 'lists'
  * @returns {Promise<object | object[] | null>}
  */
 async function getBy(params, condition = 'AND') {
-    return await SELECT(table, params, { condition, order: 'DESC' })
+    return await SELECT(table, params, { 
+        condition,
+        order: 'DESC',
+        columnsCounts: {
+            total_todos: { 
+                table: 'todos', 
+                params: { 'lists.id': 'todos.list_id' }
+            },
+            total_todos_completed: { 
+                table: 'todos', 
+                params: { 'lists.id': 'todos.list_id', 'todos.is_complete': 1 }
+            }
+        }
+    })
 }
 
 /**
