@@ -31,7 +31,7 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 
 ### Development
 ```bash
- ./run.sh --test
+ ./run.sh --dev
 ```
 
 ### Production
@@ -138,7 +138,12 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "name": "University",
-    "color": "#283593"
+    "color": "#283593",
+    "count": {
+        "completed": 0,
+        "pending": 0,
+        "total": 0
+    }
 }
 ```
 #### GET /lists
@@ -149,7 +154,12 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
         {
             "id": 1,
             "name": "University",
-            "color": "#283593"
+            "color": "#283593",
+            "count": {
+                "completed": 1,
+                "pending": 2,
+                "total": 3
+            }
         }
     ]
 }
@@ -160,7 +170,12 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "name": "University",
-    "color": "#283593"
+    "color": "#283593",
+    "count": {
+        "completed": 1,
+        "pending": 2,
+        "total": 3
+    }
 }
 ```
 #### PUT /lists/:id
@@ -175,7 +190,12 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
 {
     "id": 1,
     "name": "University Edit",
-    "color": "#283593"
+    "color": "#283593",
+    "count": {
+        "completed": 1,
+        "pending": 2,
+        "total": 3
+    }
 }
 ```
 #### POST /lists/:id/todos
@@ -204,6 +224,7 @@ This project use Docker Compose to defining the Docker containers (Node and MySQ
             "is_complete": false
         }
     ]
+}
 ```
 #### DELETE /lists/:id
 ##### Response
